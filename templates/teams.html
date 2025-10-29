@@ -1,0 +1,28 @@
+{% extends 'base.html' %}
+{% block content %}
+  <div class="bg-white p-6 rounded shadow">
+    <h2 class="text-2xl font-bold">Teams</h2>
+    <div class="mt-4 grid grid-cols-1 md:grid-cols-3 gap-4">
+      {% for t in teams %}
+        <div class="p-3 border rounded">
+          <div class="font-semibold">{{ t.country }}</div>
+          <div class="text-sm text-gray-600">Manager: {{ t.manager }}</div>
+          <div class="text-sm text-gray-600">Representative: {{ t.rep_name }} ({{ t.rep_email }})</div>
+          <div class="text-sm text-gray-600">Rating: {{ t.rating }}</div>
+          <div class="mt-2">
+            <details class="text-sm">
+              <summary class="cursor-pointer text-sky-600">View Squad</summary>
+              <ul class="mt-2 list-disc list-inside text-sm">
+                {% for p in t.players %}
+                  <li>{{ p.name }} — {{ p.natural }} — Rating (natural): {{ p.ratings[p.natural] }}</li>
+                {% endfor %}
+              </ul>
+            </details>
+          </div>
+        </div>
+      {% else %}
+        <div class="col-span-3 text-gray-500">No teams registered yet.</div>
+      {% endfor %}
+    </div>
+  </div>
+{% endblock %}

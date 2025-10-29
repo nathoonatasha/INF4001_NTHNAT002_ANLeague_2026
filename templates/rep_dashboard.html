@@ -1,0 +1,47 @@
+{% extends 'base.html' %}
+{% block content %}
+  <div class="bg-white p-6 rounded shadow">
+    <div class="flex justify-between items-center">
+      <h2 class="text-2xl font-bold">Representative Dashboard</h2>
+      <div>
+        <a href="/rep/logout" class="px-3 py-1 border rounded">Logout</a>
+      </div>
+    </div>
+
+    {% if team %}
+      <div class="mt-4">
+        <h3 class="text-xl font-semibold">{{ team.country }}</h3>
+        <div class="text-sm text-gray-600">Manager: {{ team.manager }}</div>
+        <div class="mt-3">
+          <strong>Team Rating:</strong> {{ team.rating }}
+        </div>
+        <div class="mt-4">
+          <h4 class="font-semibold">Squad</h4>
+          <ul class="list-disc list-inside mt-2">
+            {% for p in team.players %}
+              <li>{{ p.name }} — {{ p.natural }} — Rating: {{ p.ratings[p.natural] }}</li>
+            {% endfor %}
+          </ul>
+        </div>
+        <div class="mt-4">
+          <h4 class="font-semibold">Matches</h4>
+          <ul class="list-inside mt-2">
+            {% for m in matches %}
+              <li>
+                {{ m.team1_country }} vs {{ m.team2_country }} — {{ m.stage }}
+                {% if m.played %}
+                  — Score: {{ m.score1 }}-{{ m.score2 }}
+                {% endif %}
+                <a href="/match/{{ m._id }}" class="ml-2 text-sky-600">View</a>
+              </li>
+            {% else %}
+              <li class="text-gray-500">No matches yet.</li>
+            {% endfor %}
+          </ul>
+        </div>
+      </div>
+    {% else %}
+      <div class="text-gray-600">No team associated with this account.</div>
+    {% endif %}
+  </div>
+{% endblock %}

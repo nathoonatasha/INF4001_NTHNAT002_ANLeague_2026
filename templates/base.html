@@ -1,0 +1,47 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>African Nations League Simulator</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="/static/styles.css" />
+  </head>
+  <body class="min-h-screen bg-gray-50 text-gray-900">
+    <header class="bg-white shadow">
+      <div class="container mx-auto px-4 py-4 flex justify-between items-center">
+        <h1 class="text-xl font-semibold">African Nations League</h1>
+        <nav class="space-x-4">
+          <a href="/" class="text-sm text-sky-600">Home</a>
+          <a href="/register" class="text-sm">Register Team</a>
+          <a href="/bracket" class="text-sm">Bracket</a>
+          <a href="/teams" class="text-sm">Teams</a>
+          <a href="/admin" class="text-sm text-gray-700">Admin</a>
+          {% if session.get('rep') %}
+            <a href="/rep/dashboard" class="text-sm text-sky-600">My Team</a>
+            <a href="/rep/logout" class="text-sm">Logout</a>
+          {% else %}
+            <a href="/rep/login" class="text-sm">Representative Login</a>
+          {% endif %}
+        </nav>
+      </div>
+    </header>
+    <main class="container mx-auto p-4">
+      {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+          <div class="space-y-2">
+            {% for category, msg in messages %}
+              <div class="p-3 rounded {{ 'bg-green-100 text-green-800' if category=='success' else 'bg-red-100 text-red-800' }}">{{ msg }}</div>
+            {% endfor %}
+          </div>
+        {% endif %}
+      {% endwith %}
+      {% block content %}{% endblock %}
+    </main>
+    <footer class="mt-12 py-6 border-t bg-white">
+      <div class="container mx-auto px-4 text-sm text-gray-600">
+         INF4001N @ 2026 African Nations League.
+      </div>
+    </footer>
+  </body>
+</html>

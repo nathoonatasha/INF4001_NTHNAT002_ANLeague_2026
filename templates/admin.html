@@ -1,0 +1,81 @@
+{% extends 'base.html' %}
+{% block content %}
+  <div class="bg-white p-6 rounded shadow">
+    <h2 class="text-2xl font-bold">Administrator Dashboard</h2>
+    <div class="mt-4">
+      <h3 class="font-semibold">Teams ({{ teams|length }})</h3>
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mt-3">
+        {% for t in teams %}
+          <div class="p-4 border rounded shadow-sm bg-gradient-to-br from-white to-slate-50">
+            <div class="flex items-center justify-between">
+              <div>
+                <div class="font-semibold text-lg">{{ t.country }}</div>
+                <div class="text-sm text-gray-600">Manager: {{ t.manager }}</div>
+                <div class="text-sm text-gray-600">Rating: {{ t.rating }}</div>
+              </div>
+              <div class="text-sm text-center">
+                <form method="post" action="/admin/remove_team/{{ t._id }}" style="display:inline">
+                  <button class="px-2 py-1 border rounded text-red-600">Remove</button>
+                </form>
+                <form method="post" action="/admin/replace_team/{{ t._id }}" style="display:inline">
+                  <button class="px-2 py-1 border rounded text-sky-600">Replace</button>
+                </form>
+              </div>
+            </div>
+          </div>
+        {% endfor %}
+      </div>
+    </div>
+    <div class="mt-6">
+      <h3 class="font-semibold">Matches</h3>
+      <div class="mt-2 space-y-2">
+        {% for m in matches %}
+          <div class="p-3 border rounded flex flex-col md:flex-row md:justify-between md:items-center gap-2">
+            <div>
+              <div class="font-semibold">{{ m.team1_country }} vs {{ m.team2_country }}</div>
+              <div class="text-sm text-gray-600">Stage: {{ m.stage }} {% if m.played %} • Played {% endif %}</div>
+            </div>
+            <div class="flex items-center gap-2">
+              {% if not m.played %}
+                <form method="post" action="/admin/simulate/{{ m._id }}" style="display:inline">
+                  <button class="px-3 py-1 bg-green-600 text-white rounded">Simulate</button>
+                </form>
+              {% else %}
+                <a class="px-3 py-1 border rounded" href="/match/{{ m._id }}">View</a>
+              {% endif %}
+            </div>
+          </div>
+        {% else %}
+          <div class="text-gray-500">No matches yet.</div>
+        {% endfor %}
+      </div>
+    </div>
+    <div class="mt-6 flex flex-wrap gap-3">
+      <form method="post" action="/admin/start">
+        <button class="px-4 py-2 bg-sky-600 text-white rounded" {% if not allow_start %}disabled{% endif %}>Start Tournament (Create Quarterfinals)</button>
+      </form>
+      <form method="post" action="/admin/reset">
+        <button class="px-4 py-2 border rounded">Reset Tournament</button>
+      </form>
+      <form method="post" action="/admin/seed">
+        <button class="px-4 py-2 border rounded">Seed 7 Demo Teams</button>
+      </form>
+      <form method="post" action="/admin/add_eighth">
+        <button class="px-4 py-2 border rounded">Add 8th Team</button>
+      </form>
+      <form method="post" action="/admin/create_rep_users">
+        <button class="px-4 py-2 border rounded">Create Rep Users (default password)</button>
+      </form>
+      <form method="post" action="/admin/simulate_all">
+        <button class="px-4 py-2 bg-green-600 text-white rounded">Simulate All Matches</button>
+      </form>
+      <a href="/analytics" class="px-4 py-2 border rounded">Analytics</a>
+      <a href="/leaderboard" class="px-4 py-2 border rounded">Top Scorers</a>
+      <a href="/history" class="px-4 py-2 border rounded">Past Tournaments</a>
+      <form method="post" action="/admin/email" style="display:inline">
+        <button class="px-4 py-2 border rounded">Send Tournament Email</button>
+      </form>
+      <a href="/admin/logout" class="px-4 py-2 border rounded">Logout</a>
+    </div>
+  </div>
+{% endblock %}

@@ -1,0 +1,49 @@
+{% extends 'base.html' %}
+{% block content %}
+  <div class="bg-white p-6 rounded shadow">
+    <h2 class="text-2xl font-bold">Team Analytics</h2>
+    <div class="mt-4 grid grid-cols-1 md:grid-cols-2 gap-4">
+      {% for t in teams %}
+        <div class="p-3 border rounded">
+          <div class="font-semibold">{{ t.country }}</div>
+          <div class="text-sm">Rating: {{ t.rating }}</div>
+          <div class="mt-2 text-sm">
+            Goals Scored: {{ t.stats.goals_scored }}<br />
+            Goals Against: {{ t.stats.goals_against }}<br />
+            Wins: {{ t.stats.wins }} Draws: {{ t.stats.draws }} Losses: {{ t.stats.losses }}<br />
+            Matches Played: {{ t.stats.matches_played }}
+          </div>
+        </div>
+      {% endfor %}
+    </div>
+
+    <div class="mt-8 bg-white p-4 rounded shadow">
+      <h3 class="font-semibold mb-2">Overview Charts</h3>
+      <canvas id="goalsChart" width="400" height="200"></canvas>
+    </div>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <script>
+    const teams = {{ teams|tojson }};
+    const labels = teams.map(t => t.country);
+    const goals = teams.map(t => t.stats.goals_scored);
+    const wins = teams.map(t => t.stats.wins);
+
+    const ctx = document.getElementById('goalsChart').getContext('2d');
+    new Chart(ctx, {
+      type: 'bar',
+      data: {
+        labels: labels,
+        datasets: [
+          { label: 'Goals Scored', data: goals, backgroundColor: 'rgba(59,130,246,0.7)' },
+          { label: 'Wins', data: wins, backgroundColor: 'rgba(16,185,129,0.7)' }
+        ]
+      },
+      options: {
+        responsive: true,
+        scales: { y: { beginAtZero: true } }
+      }
+    });
+  </script>
+{% endblock %}

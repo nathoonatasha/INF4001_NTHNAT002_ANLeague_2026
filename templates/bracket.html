@@ -1,0 +1,36 @@
+{% extends 'base.html' %}
+{% block content %}
+  <div class="bg-white p-6 rounded shadow">
+    <h2 class="text-2xl font-bold">Road to the Final (Bracket)</h2>
+    <div class="mt-6">
+      {% if matches %}
+        <div class="space-y-4">
+          {% for m in matches %}
+            <div class="p-3 border rounded flex justify-between items-center">
+              <div>
+                <div class="font-semibold">{{ m.team1_country }} vs {{ m.team2_country }}</div>
+                <div class="text-sm text-gray-600">Stage: {{ m.stage }}</div>
+                {% if m.played %}
+                  <div class="text-sm">Final Score: {{ m.team1_country }} {{ m.score1 }} - {{ m.score2 }} {{ m.team2_country }}</div>
+                {% else %}
+                  <div class="text-sm">Not yet played</div>
+                {% endif %}
+              </div>
+              <div class="space-x-2">
+                {% if not m.played %}
+                  <form method="post" action="/admin/simulate/{{ m._id }}">
+                    <button class="px-3 py-1 bg-green-600 text-white rounded">Simulate</button>
+                  </form>
+                {% else %}
+                  <a href="/match/{{ m._id }}" class="px-3 py-1 border rounded">View</a>
+                {% endif %}
+              </div>
+            </div>
+          {% endfor %}
+        </div>
+      {% else %}
+        <div class="text-gray-500">Bracket is not yet created. Admin will start when 8 teams registered.</div>
+      {% endif %}
+    </div>
+  </div>
+{% endblock %}

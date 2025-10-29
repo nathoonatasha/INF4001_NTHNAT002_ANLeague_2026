@@ -1,0 +1,43 @@
+{% block content %}
+<div class="container">
+  <div class="card">
+    <div class="flex items-center justify-between">
+      <h2 class="text-2xl font-semibold">Tournament History</h2>
+      <a href="{{ url_for('admin_dashboard') }}" class="btn-muted">Back to Admin</a>
+    </div>
+
+    <div class="mt-6">
+      {% if tournaments and tournaments|length > 0 %}
+        <table style="width:100%;border-collapse:collapse">
+          <thead>
+            <tr style="text-align:left;border-bottom:1px solid rgba(15,23,42,0.06)">
+              <th style="padding:10px">#</th>
+              <th style="padding:10px">Winner</th>
+              <th style="padding:10px">Played At</th>
+              <th style="padding:10px">Notes</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for tour in tournaments %}
+              <tr style="border-bottom:1px solid rgba(15,23,42,0.04)">
+                <td style="padding:10px;vertical-align:top">{{ loop.index }}</td>
+                <td style="padding:10px;vertical-align:top;font-weight:600">{{ tour.winner_country }}</td>
+                <td style="padding:10px;vertical-align:top">
+                  {% if tour.played_at %}
+                    {{ tour.played_at.strftime('%Y-%m-%d %H:%M UTC') if tour.played_at.__class__.__name__ == 'datetime' else tour.played_at }}
+                  {% else %}
+                    N/A
+                  {% endif %}
+                </td>
+                <td style="padding:10px;vertical-align:top">ID: {{ tour._id }}</td>
+              </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      {% else %}
+        <div class="prose">No past tournaments recorded yet.</div>
+      {% endif %}
+    </div>
+  </div>
+</div>
+{% endblock %}

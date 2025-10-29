@@ -1,0 +1,56 @@
+{% extends 'base.html' %}
+{% block content %}
+  <div class="bg-white p-6 rounded shadow">
+    <h2 class="text-2xl font-bold">{{ team1.country }} vs {{ team2.country }}</h2>
+    {% if match.played %}
+      <div class="mt-4">
+        <div class="text-lg font-semibold">Final Score: {{ team1.country }} {{ match.score1 }} - {{ match.score2 }} {{ team2.country }}</div>
+        <div class="mt-4">
+          <h3 class="font-semibold">Goal Scorers</h3>
+          <ul class="list-disc list-inside mt-2 space-y-2">
+            {% for s in match.scorers %}
+              <li class="flex items-center justify-between">
+                <div>
+                  <strong>{{ s.team_country }}</strong> - {{ s.player }} ({{ s.minute }}')
+                </div>
+                <div class="flex items-center gap-2">
+                  <button type="button" class="play-goal px-3 py-1 bg-red-600 text-white rounded text-sm">Play Goal SFX</button>
+                  {% if s.gif %}
+                    <img src="{{ s.gif }}" data-full="{{ s.gif }}" class="gif-thumb h-12 w-20 object-cover cursor-pointer rounded" alt="moment gif"/>
+                  {% endif %}
+                </div>
+              </li>
+            {% endfor %}
+          </ul>
+        </div>
+        {% if match.commentary %}
+          <div class="mt-4">
+            <h3 class="font-semibold">Match Commentary</h3>
+            <div class="prose mt-2">{{ match.commentary | safe }}</div>
+            <div class="mt-3">
+              <button id="play-commentary" class="px-3 py-2 bg-sky-600 text-white rounded">Play Commentary (TTS)</button>
+            </div>
+          </div>
+        {% endif %}
+        <!-- Audio elements -->
+        <audio id="goal-sfx" src="{{ match.assets.goal_sfx if match.assets else '/static/goal.ogg' }}" preload="auto"></audio>
+        <audio id="crowd-sfx" src="{{ match.assets.crowd_cheer if match.assets else '/static/crowd.ogg' }}" preload="auto"></audio>
+
+        <!-- GIF lightbox modal -->
+        <div id="gif-modal" class="fixed inset-0 bg-black bg-opacity-70 flex items-center justify-center hidden">
+          <div class="bg-white rounded p-4 max-w-3xl w-full">
+            <div class="flex justify-end">
+              <button id="gif-modal-close" class="px-2 py-1 text-gray-700">Close</button>
+            </div>
+            <img id="gif-modal-img" src="" class="mx-auto max-h-[70vh]" alt="gif" />
+          </div>
+        </div>
+
+      </div>
+    {% else %}
+      <div class="mt-4 text-gray-600">Match not yet played. Administrative simulation pending.</div>
+    {% endif %}
+  </div>
+
+  <script src="/static/match.js"></script>
+{% endblock %}
