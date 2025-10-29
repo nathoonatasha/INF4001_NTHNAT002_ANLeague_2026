@@ -1,0 +1,10 @@
+xternal assets used by the app:
+
+Goal sound effect: https://actions.google.com/sounds/v1/alarms/alarm_clock.ogg
+Crowd cheer: https://actions.google.com/sounds/v1/human_voices/applause.ogg
+Example key moment GIFs from GIPHY:
+ - https://media.giphy.com/media/3o6ZtaO9BZHcOjmErm/giphy.gif
+ - https://media.giphy.com/media/l0MYt5jPR6QX5pnqM/giphy.gif
+ - https://media.giphy.com/media/26FPJWvYk8Z1nNvNK/giphy.gif
+
+You may replace these URLs with your own hosted assets in static/ and update templates accordingly.
